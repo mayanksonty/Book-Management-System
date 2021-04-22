@@ -27,6 +27,39 @@ UI.prototype.addBookToList = function(book){
     list.appendChild(row);
 }
 
+// alert function
+UI.prototype.showAlert = function(message,className){
+    // creating div element
+    const div = document.createElement('div');
+
+    // adding className 
+    div.className = `alert ${className}`;
+
+    // add text 
+    div.appendChild(document.createTextNode(message));
+
+    // get parent 
+    const container = document.querySelector('.container');
+    const form = document.querySelector('#book-form');
+
+    // insert alert
+    container.insertBefore(div, form);
+
+    // setting the time out
+    setTimeout(function(){
+        document.querySelector('.alert').remove();
+    },2000)
+
+}
+
+// delete books
+UI.prototype.deleteBook = function (target){
+    if(target.className === 'delete'){
+        target.parentElement.parentElement.remove();
+    }
+}
+
+
 // clear fields
 UI.prototype.clearFields = function(){
     document.querySelector('#title').value = '';
@@ -43,13 +76,47 @@ document.querySelector('#book-form').addEventListener('submit',function (e){
 
     // instantiate book
     const book = new Book(title, author, isbn);
+
+    // instantiate the UI
+    const ui = new UI();
     
+    // validation
+    if(title ==='' || author === '' || isbn === ''){
+        // show Alert
+        ui.showAlert('Please fill in all the fields','error');
+    }else {
+        // instantiate ui
+        ui.addBookToList(book);
+        
+        // show success msg
+        ui.showAlert('Book is added to the list', 'success');
+
+        // clear the fields
+        ui.clearFields();
+    }
+
+
+    // // instantiate book
+    // const book = new Book(title, author, isbn);
+
+    // // instantiate ui
+    // const ui = new UI();
+    // ui.addBookToList(book);
+    
+    // // clear the fields
+    // ui.clearFields();
+
+    e.preventDefault();
+});
+
+// event listenr for delete button
+document.querySelector('#book-list').addEventListener('click', function(e){
     // instantiate ui
     const ui = new UI();
-    ui.addBookToList(book);
-    
-    // clear the fields
-    ui.clearFields();
+    ui.deleteBook(e.target);
+
+    // show alert
+    ui.showAlert('Book is Removed !!', 'success');
 
     e.preventDefault();
 });
