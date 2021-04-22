@@ -55,6 +55,10 @@ UI.prototype.showAlert = function(message,className){
 // delete books
 UI.prototype.deleteBook = function (target){
     if(target.className === 'delete'){
+         /*as the delete button will only delete the 
+        link not the whole tr 
+        so we use parentElemet twice to reach to td and to tr 
+        so to delete the whole tr just traversing the DOM*/
         target.parentElement.parentElement.remove();
     }
 }
